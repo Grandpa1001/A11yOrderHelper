@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "A11Y Order Helper",
+  "version": "0.0.1",
+  "description": "Wizualizacja kolejności odczytu (focus order) na stronie.",
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "A11Y Order Helper"
+  },
+  "content_scripts": [
+    {
+      "js": ["src/content/content.ts"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "permissions": ["activeTab"]
+}
