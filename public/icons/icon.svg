@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="24" fill="#0d6efd"/>
+  <!-- Trzy kółka (kolejność 1-2-3) + linia łącząca -->
+  <circle cx="32" cy="64" r="18" fill="none" stroke="#fff" stroke-width="6"/>
+  <circle cx="64" cy="64" r="18" fill="none" stroke="#fff" stroke-width="6"/>
+  <circle cx="96" cy="64" r="18" fill="none" stroke="#fff" stroke-width="6"/>
+  <path d="M50 64 L78 64" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <polygon points="96,52 96,76 110,64" fill="#fff"/>
+</svg>

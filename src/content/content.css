@@ -1,0 +1,54 @@
+/* Host overlay — pełny viewport, zawsze na pierwszym planie. */
+#a11y-order-helper-host {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  isolation: isolate;
+  pointer-events: none;
+}
+
+.a11y-overlay-container {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  overflow: hidden;
+}
+
+.a11y-lines-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.a11y-line {
+  stroke: #333;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.a11y-numbers-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.a11y-number {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #000;
+  background: #ffeb3b;
+  border: 2px solid #000;
+  border-radius: 4px;
+  box-sizing: border-box;
+  pointer-events: none;
+}

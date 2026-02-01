@@ -7,9 +7,21 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
-    <div class="container">
-      <h1>A11Y Order Helper</h1>
-      <button type="button" id="btn-run">Uruchom</button>
+    <div class="popup">
+      <header class="popup-header">
+        <img class="popup-header-icon" id="popup-icon" src="" alt="" width="32" height="32" />
+        <h1 class="popup-title">A11Y Order Helper</h1>
+      </header>
+      <main class="popup-main">
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" id="btn-run">Uruchom</button>
+          <button type="button" class="btn btn-secondary" id="btn-stop">Wyłącz</button>
+        </div>
+        <div class="slider-section">
+          <label for="opacity-slider" class="slider-label">Przezroczystość</label>
+          <input type="range" id="opacity-slider" class="slider" min="0" max="100" value="0" />
+        </div>
+      </main>
     </div>
     <script type="module" src="./popup.ts"></script>
   </body>
