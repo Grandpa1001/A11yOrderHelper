@@ -57,3 +57,48 @@ test.describe("Popup E2E (4.2)", () => {
     expect(stored.overlayTheme).toBe("minimal");
   });
 });
+
+test.describe("Content E2E (4.3) — overlay na stronie", () => {
+  const TEST_PAGE_URL = "https://pl.wikipedia.org/wiki/Strona_g%C5%82%C3%B3wna";
+
+  test("po Uruchom w popup na stronie pojawia się host overlay z numerkami i liniami SVG", async ({
+    context,
+    popupUrl,
+  }) => {
+    const contentPage = await context.newPage();
+    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "domcontentloaded", timeout: 15_000 });
+
+    const popupPage = await context.newPage();
+    await popupPage.goto(popupUrl);
+
+    await contentPage.bringToFront();
+    await contentPage.waitForTimeout(300);
+    await popupPage.evaluate(() => document.getElementById("btn-run")?.click());
+
+    const host = contentPage.locator("#a11y-order-helper-host");
+    await host.waitFor({ state: "attached", timeout: 15_000 });
+
+    await expect(host.locator(".a11y-number").first()).toBeAttached();
+    await expect(host.locator(".a11y-lines-svg")).toBeAttached();
+    await expect(host.locator(".a11y-line").first()).toBeAttached();
+  });
+
+  test("po Wyłącz host overlay znika z dokumentu", async ({ context, popupUrl }) => {
+    const contentPage = await context.newPage();
+    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "domcontentloaded", timeout: 15_000 });
+
+    const popupPage = await context.newPage();
+    await popupPage.goto(popupUrl);
+
+    await contentPage.bringToFront();
+    await contentPage.waitForTimeout(300);
+    await popupPage.evaluate(() => document.getElementById("btn-run")?.click());
+    await contentPage.locator("#a11y-order-helper-host").waitFor({ state: "attached", timeout: 15_000 });
+
+    await contentPage.bringToFront();
+    await contentPage.waitForTimeout(300);
+    await popupPage.evaluate(() => document.getElementById("btn-stop")?.click());
+
+    await expect(contentPage.locator("#a11y-order-helper-host")).toHaveCount(0, { timeout: 5_000 });
+  });
+});
