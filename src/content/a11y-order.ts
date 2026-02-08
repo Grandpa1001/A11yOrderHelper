@@ -67,3 +67,72 @@ export function getViewportDimensions(): DocumentDimensions {
     height: window.innerHeight,
   };
 }
+
+const HEADING_SELECTOR = "h1, h2, h3, h4, h5, h6, [role='heading']";
+const IMG_WITH_NAME_SELECTOR = "img[alt]:not([alt='']), img[aria-label], [role='img'][aria-label]";
+
+function isExcludedForReading(el: Element): boolean {
+  if (el.getAttribute("aria-hidden") === "true") return true;
+  if (el.getAttribute("hidden") != null) return true;
+  try {
+    const style = (el as HTMLElement).ownerDocument.defaultView?.getComputedStyle(el as HTMLElement);
+    if (style?.getPropertyValue("display") === "none") return true;
+  } catch {
+    return true;
+  }
+  return false;
+}
+
+function isReadingOrderElement(el: Element): boolean {
+  if (el instanceof HTMLElement && el.matches(FOCUSABLE_SELECTOR)) return true;
+  if (el.matches(HEADING_SELECTOR)) return true;
+  if (el.matches(IMG_WITH_NAME_SELECTOR)) return true;
+  return false;
+}
+
+function getReadingOrderElements(doc: Document): Element[] {
+  const result: Element[] = [];
+  try {
+    const walker = doc.createTreeWalker(doc.body ?? doc.documentElement, NodeFilter.SHOW_ELEMENT, {
+      acceptNode(node) {
+        const el = node as Element;
+        if (isExcludedForReading(el)) return NodeFilter.FILTER_REJECT;
+        if (!isReadingOrderElement(el)) return NodeFilter.FILTER_SKIP;
+        if (!isVisible(el)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+    let node: Element | null = walker.nextNode() as Element | null;
+    while (node) {
+      result.push(node);
+      node = walker.nextNode() as Element | null;
+    }
+  } catch {
+    return getFocusOrderElements(doc);
+  }
+  return result;
+}
+
+export function getReadingOrderWithCoordinates(
+  doc: Document = document
+): FocusOrderItem[] {
+  try {
+    const elements = getReadingOrderElements(doc);
+    return elements.map((el, i) => {
+      try {
+        const rect = el.getBoundingClientRect();
+        const r: Rect = {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        };
+        return { index: i + 1, rect: r };
+      } catch {
+        return { index: i + 1, rect: { left: 0, top: 0, width: 0, height: 0 } };
+      }
+    });
+  } catch {
+    return [];
+  }
+}

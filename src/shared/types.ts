@@ -18,10 +18,14 @@ export interface DocumentDimensions {
   height: number;
 }
 
+/** Typ czytnika / tryb kolejności (ścieżka 2). */
+export type ReaderType = "focus" | "voiceover" | "nvda";
+
 /** Typy wiadomości popup ↔ content. */
 export type ContentMessageType = "RUN" | "STOP" | "SET_OPACITY";
 
 export interface ContentMessage {
   type: ContentMessageType;
   opacity?: number;
+  readerType?: ReaderType;
 }

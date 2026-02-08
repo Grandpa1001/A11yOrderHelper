@@ -1,4 +1,3 @@
-/* Host overlay — pełny viewport, zawsze na pierwszym planie. */
 #a11y-order-helper-host {
   position: fixed;
   inset: 0;
@@ -10,7 +9,7 @@
 .a11y-overlay-container {
   position: absolute;
   inset: 0;
-  background: #fff;
+  background: var(--a11y-container-bg, #fff);
   overflow: hidden;
 }
 
@@ -23,9 +22,9 @@
 }
 
 .a11y-line {
-  stroke: #333;
-  stroke-width: 2;
-  stroke-linecap: round;
+  stroke: var(--a11y-line-stroke, #333);
+  stroke-width: var(--a11y-line-width, 2);
+  stroke-linecap: var(--a11y-line-cap, round);
 }
 
 .a11y-numbers-layer {
@@ -40,15 +39,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.5rem;
-  height: 1.5rem;
+  min-width: var(--a11y-badge-min-width, 1.5rem);
+  height: var(--a11y-badge-height, 1.5rem);
   padding: 0 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #000;
-  background: #ffeb3b;
-  border: 2px solid #000;
-  border-radius: 4px;
+  font-size: var(--a11y-badge-font-size, 0.875rem);
+  font-weight: var(--a11y-badge-font-weight, 700);
+  color: var(--a11y-badge-color, #000);
+  background: var(--a11y-badge-bg, #ffeb3b);
+  border: var(--a11y-badge-border, 2px solid) var(--a11y-badge-border-color, #000);
+  border-radius: var(--a11y-badge-radius, 4px);
   box-sizing: border-box;
   pointer-events: none;
 }

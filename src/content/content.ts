@@ -1,15 +1,19 @@
-import type { ContentMessage } from "../shared/types";
+import type { ContentMessage, ReaderType } from "../shared/types";
 import {
   getFocusOrderWithCoordinates,
+  getReadingOrderWithCoordinates,
   getViewportDimensions,
 } from "./a11y-order";
 import { createOverlay, removeOverlay, setOverlayOpacity } from "./overlay";
 
 const OVERLAY_HOST_ID = "a11y-order-helper-host";
+const STORAGE_KEY_THEME = "overlayTheme";
 
 let resizeObserver: ResizeObserver | null = null;
 let keepOnTopObserver: MutationObserver | null = null;
 let currentOpacity = 0;
+let currentReaderType: ReaderType = "focus";
+let currentThemeName: "default" | "minimal" = "default";
 
 function keepOverlayOnTop(): void {
   const host = document.getElementById(OVERLAY_HOST_ID);
@@ -19,12 +23,20 @@ function keepOverlayOnTop(): void {
   }
 }
 
-function runOverlay(): void {
+function runOverlay(
+  readerType: ReaderType = currentReaderType,
+  themeName: "default" | "minimal" = currentThemeName
+): void {
   try {
+    currentReaderType = readerType;
+    currentThemeName = themeName;
     removeOverlay(document);
-    const items = getFocusOrderWithCoordinates(document);
+    const items =
+      readerType === "voiceover" || readerType === "nvda"
+        ? getReadingOrderWithCoordinates(document)
+        : getFocusOrderWithCoordinates(document);
     const dimensions = getViewportDimensions();
-    const host = createOverlay(items, dimensions);
+    const host = createOverlay(items, dimensions, themeName);
     document.body.appendChild(host);
     setOverlayOpacity(currentOpacity, document);
 
@@ -33,7 +45,9 @@ function runOverlay(): void {
     keepOnTopObserver.observe(document.body, { childList: true, subtree: false });
 
     if (resizeObserver) resizeObserver.disconnect();
-    resizeObserver = new ResizeObserver(() => runOverlay());
+    resizeObserver = new ResizeObserver(() =>
+      runOverlay(currentReaderType, currentThemeName)
+    );
     resizeObserver.observe(document.documentElement);
   } catch {
     // Nie rzucamy dalej — strona lub DOM w nietypowym stanie
@@ -60,8 +74,16 @@ chrome.runtime.onMessage.addListener(
   ) => {
     try {
       if (message.type === "RUN") {
-        runOverlay();
-        sendResponse({ ok: true });
+        const readerType =
+          message.readerType === "voiceover" || message.readerType === "nvda"
+            ? message.readerType
+            : "focus";
+        chrome.storage.local.get(STORAGE_KEY_THEME, (data) => {
+          const themeName =
+            data[STORAGE_KEY_THEME] === "minimal" ? "minimal" : "default";
+          runOverlay(readerType, themeName);
+          sendResponse({ ok: true });
+        });
       } else if (message.type === "STOP") {
         stopOverlay();
         sendResponse({ ok: true });

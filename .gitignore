@@ -11,3 +11,7 @@ docs/READERS-DEV.md
 docs/TRYBY-CZYTNIKOW.md
 docs/VOICEOVER.md
 docs/WYGLAD-OVERLAY.md
+test-results
+playwright-report
+blob-report
+e2e/test-user-data

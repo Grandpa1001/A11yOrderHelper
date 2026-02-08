@@ -13,6 +13,28 @@
         <h1 class="popup-title">A11Y Order Helper</h1>
       </header>
       <main class="popup-main">
+        <fieldset class="reader-fieldset" id="reader-fieldset">
+          <legend class="reader-legend">Typ czytnika</legend>
+          <label class="reader-label">
+            <input type="radio" name="reader" value="focus" id="reader-focus" />
+            <span>Focus order</span>
+          </label>
+          <label class="reader-label">
+            <input type="radio" name="reader" value="voiceover" id="reader-voiceover" />
+            <span>VoiceOver</span>
+          </label>
+          <label class="reader-label">
+            <input type="radio" name="reader" value="nvda" id="reader-nvda" />
+            <span>NVDA</span>
+          </label>
+        </fieldset>
+        <div class="theme-section">
+          <label for="theme-select" class="theme-label">Styl overlay</label>
+          <select id="theme-select" class="theme-select" aria-label="Wygląd overlay">
+            <option value="default">Domyślny</option>
+            <option value="minimal">Minimalny</option>
+          </select>
+        </div>
         <div class="btn-group">
           <button type="button" class="btn btn-primary" id="btn-run">Uruchom</button>
           <button type="button" class="btn btn-secondary" id="btn-stop">Wyłącz</button>
