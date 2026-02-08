@@ -8,7 +8,7 @@ const FOCUSABLE_SELECTOR =
  * Zwraca listę elementów w kolejności focus (tab order) — kolejność DOM.
  * Pomija elementy niewidoczne (zerowy rozmiar). Nie rzuca — błędy są łapane.
  */
-function getFocusOrderElements(doc: Document): Element[] {
+export function getFocusOrderElements(doc: Document): Element[] {
   const result: Element[] = [];
   try {
     const nodes = doc.querySelectorAll(FOCUSABLE_SELECTOR);
@@ -90,7 +90,7 @@ function isReadingOrderElement(el: Element): boolean {
   return false;
 }
 
-function getReadingOrderElements(doc: Document): Element[] {
+export function getReadingOrderElements(doc: Document): Element[] {
   const result: Element[] = [];
   try {
     const walker = doc.createTreeWalker(doc.body ?? doc.documentElement, NodeFilter.SHOW_ELEMENT, {

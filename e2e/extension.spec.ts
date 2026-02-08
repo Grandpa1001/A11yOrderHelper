@@ -66,7 +66,7 @@ test.describe("Content E2E (4.3) — overlay na stronie", () => {
     popupUrl,
   }) => {
     const contentPage = await context.newPage();
-    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "domcontentloaded", timeout: 15_000 });
+    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "load", timeout: 20_000 });
 
     const popupPage = await context.newPage();
     await popupPage.goto(popupUrl);
@@ -78,14 +78,69 @@ test.describe("Content E2E (4.3) — overlay na stronie", () => {
     const host = contentPage.locator("#a11y-order-helper-host");
     await host.waitFor({ state: "attached", timeout: 15_000 });
 
-    await expect(host.locator(".a11y-number").first()).toBeAttached();
+    const numbers = host.locator(".a11y-number");
+    const lines = host.locator(".a11y-line");
+    await expect(numbers.first()).toBeAttached();
     await expect(host.locator(".a11y-lines-svg")).toBeAttached();
-    await expect(host.locator(".a11y-line").first()).toBeAttached();
+    await expect(lines.first()).toBeAttached();
+    // Overlay ma obejmować całą stronę — na stronie głównej Wikipedii jest wiele elementów focusable
+    await expect(numbers).toHaveCount(await numbers.count(), { timeout: 2_000 });
+    const count = await numbers.count();
+    expect(count).toBeGreaterThanOrEqual(5);
+    expect(await lines.count()).toBeGreaterThanOrEqual(Math.max(0, count - 1));
+  });
+
+  const MIN_POINTS = 20;
+  /** Opóźnienie po każdym punkcie (ms) — czas na symulację „czytania” przez czytnik / śledzenie wzrokiem */
+  const DELAY_PER_POINT_MS = 800;
+
+  test("widget zaznacza co najmniej 20 punktów — przejście przez 20 pierwszych z opóźnieniem i podświetleniem", async ({
+    context,
+    popupUrl,
+  }) => {
+    test.setTimeout(60_000);
+    const contentPage = await context.newPage();
+    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "load", timeout: 20_000 });
+
+    const popupPage = await context.newPage();
+    await popupPage.goto(popupUrl);
+
+    await contentPage.bringToFront();
+    await contentPage.waitForTimeout(300);
+    await popupPage.evaluate(() => document.getElementById("btn-run")?.click());
+
+    const host = contentPage.locator("#a11y-order-helper-host");
+    await host.waitFor({ state: "attached", timeout: 15_000 });
+
+    const numbers = host.locator(".a11y-number");
+    await expect(numbers.first()).toBeAttached();
+    const count = await numbers.count();
+    expect(count).toBeGreaterThanOrEqual(MIN_POINTS);
+
+    const texts = await numbers.evaluateAll((nodes) =>
+      nodes.map((n) => n.textContent?.trim() ?? "")
+    );
+    const numbered = new Set(texts);
+    for (let i = 1; i <= MIN_POINTS; i++) {
+      expect(numbered.has(String(i))).toBe(true);
+    }
+
+    // Przejście przez 20 pierwszych punktów: focus na elemencie (czytnik go ogłasza), podświetlenie badge, opóźnienie
+    for (let i = 0; i < MIN_POINTS; i++) {
+      await contentPage.evaluate(
+        (idx) => (window as Window & { __a11yOrderHelperFocusAtIndex?: (n: number) => void }).__a11yOrderHelperFocusAtIndex?.(idx),
+        i
+      );
+      const badge = host.locator(".a11y-number").nth(i);
+      await badge.evaluate((el) => el.classList.add("a11y-number--active"));
+      await contentPage.waitForTimeout(DELAY_PER_POINT_MS);
+      await badge.evaluate((el) => el.classList.remove("a11y-number--active"));
+    }
   });
 
   test("po Wyłącz host overlay znika z dokumentu", async ({ context, popupUrl }) => {
     const contentPage = await context.newPage();
-    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "domcontentloaded", timeout: 15_000 });
+    await contentPage.goto(TEST_PAGE_URL, { waitUntil: "load", timeout: 20_000 });
 
     const popupPage = await context.newPage();
     await popupPage.goto(popupUrl);

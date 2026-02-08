@@ -1,7 +1,8 @@
 import type { ContentMessage, ReaderType } from "../shared/types";
+import type { FocusOrderItem } from "../shared/types";
 import {
-  getFocusOrderWithCoordinates,
-  getReadingOrderWithCoordinates,
+  getFocusOrderElements,
+  getReadingOrderElements,
   getViewportDimensions,
 } from "./a11y-order";
 import { createOverlay, removeOverlay, setOverlayOpacity } from "./overlay";
@@ -15,12 +16,34 @@ let currentOpacity = 0;
 let currentReaderType: ReaderType = "focus";
 let currentThemeName: "default" | "minimal" = "default";
 
+/** Ostatnia lista elementów w kolejności overlay (dla sterowania focusem w testach E2E). */
+let lastOrderedElements: Element[] = [];
+
 function keepOverlayOnTop(): void {
   const host = document.getElementById(OVERLAY_HOST_ID);
   if (!host || !host.parentElement) return;
   if (host.parentElement.lastElementChild !== host) {
     host.parentElement.appendChild(host);
   }
+}
+
+function elementsToItems(elements: Element[]): FocusOrderItem[] {
+  return elements.map((el, i) => {
+    try {
+      const rect = el.getBoundingClientRect();
+      return {
+        index: i + 1,
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        },
+      };
+    } catch {
+      return { index: i + 1, rect: { left: 0, top: 0, width: 0, height: 0 } };
+    }
+  });
 }
 
 function runOverlay(
@@ -31,10 +54,12 @@ function runOverlay(
     currentReaderType = readerType;
     currentThemeName = themeName;
     removeOverlay(document);
-    const items =
+    const elements =
       readerType === "voiceover" || readerType === "nvda"
-        ? getReadingOrderWithCoordinates(document)
-        : getFocusOrderWithCoordinates(document);
+        ? getReadingOrderElements(document)
+        : getFocusOrderElements(document);
+    lastOrderedElements = elements;
+    const items = elementsToItems(elements);
     const dimensions = getViewportDimensions();
     const host = createOverlay(items, dimensions, themeName);
     document.body.appendChild(host);
@@ -99,3 +124,15 @@ chrome.runtime.onMessage.addListener(
     return true;
   }
 );
+
+declare global {
+  interface Window {
+    __a11yOrderHelperFocusAtIndex?: (index: number) => void;
+  }
+}
+
+/** Ustawia focus na elemencie o indeksie w kolejności overlay (0-based). Dla testów E2E — czytnik ogłasza ten element. */
+window.__a11yOrderHelperFocusAtIndex = (index: number): void => {
+  const el = lastOrderedElements[index];
+  if (el && el instanceof HTMLElement) el.focus();
+};

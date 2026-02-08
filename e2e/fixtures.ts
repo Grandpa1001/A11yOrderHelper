@@ -16,9 +16,10 @@ type ExtensionFixtures = {
 export const test = base.extend<ExtensionFixtures>({
   context: async ({}, use) => {
     const userDataDir = path.join(process.cwd(), "e2e", "test-user-data");
+    const headed = process.env.HEADED === "1";
     const context = await chromium.launchPersistentContext(userDataDir, {
       channel: "chromium",
-      headless: true,
+      headless: !headed,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,

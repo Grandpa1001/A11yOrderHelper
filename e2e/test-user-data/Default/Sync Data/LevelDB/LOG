@@ -1,3 +1,3 @@
-2026/02/08-18:00:01.360 270ad6 Reusing MANIFEST /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Sync Data/LevelDB/MANIFEST-000001
-2026/02/08-18:00:01.361 270ad6 Recovering log #3
-2026/02/08-18:00:01.362 270ad6 Reusing old log /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Sync Data/LevelDB/000003.log 
+2026/02/08-20:28:00.193 2abea5 Reusing MANIFEST /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Sync Data/LevelDB/MANIFEST-000001
+2026/02/08-20:28:00.194 2abea5 Recovering log #3
+2026/02/08-20:28:00.195 2abea5 Reusing old log /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Sync Data/LevelDB/000003.log 
