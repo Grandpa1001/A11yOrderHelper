@@ -22,21 +22,24 @@ function applyThemeToContainer(
   container.style.setProperty("--a11y-badge-height", theme.badgeHeight);
   container.style.setProperty("--a11y-badge-font-size", theme.badgeFontSize);
   container.style.setProperty("--a11y-badge-font-weight", theme.badgeFontWeight);
-  container.style.setProperty("--a11y-line-stroke", theme.lineStroke);
-  container.style.setProperty(
-    "--a11y-line-width",
-    String(theme.lineStrokeWidth)
-  );
-  container.style.setProperty("--a11y-line-cap", theme.lineStrokeLinecap);
 }
 
 export function buildOverlay(
   items: FocusOrderItem[],
   dimensions: DocumentDimensions,
-  theme: OverlayThemeConfig
+  theme: OverlayThemeConfig,
+  annotation = ""
 ): HTMLElement {
   const host = document.createElement("div");
   host.id = HOST_ID;
+  host.style.position = "absolute";
+  host.style.top = "0";
+  host.style.left = "0";
+  host.style.width = `${dimensions.width}px`;
+  host.style.height = `${dimensions.height}px`;
+  host.style.zIndex = "2147483647";
+  host.style.pointerEvents = "none";
+  host.style.isolation = "isolate";
 
   const shadow = host.attachShadow({ mode: "open" });
 
@@ -52,28 +55,6 @@ export function buildOverlay(
   applyThemeToContainer(container, theme);
   shadow.appendChild(container);
 
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("class", "a11y-lines-svg");
-  svg.setAttribute("width", String(dimensions.width));
-  svg.setAttribute("height", String(dimensions.height));
-  svg.setAttribute("aria-hidden", "true");
-
-  for (let i = 0; i < items.length - 1; i++) {
-    const a = items[i];
-    const b = items[i + 1];
-    const line = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
-    );
-    line.setAttribute("x1", String(a.rect.left));
-    line.setAttribute("y1", String(a.rect.top));
-    line.setAttribute("x2", String(b.rect.left));
-    line.setAttribute("y2", String(b.rect.top));
-    line.setAttribute("class", "a11y-line");
-    svg.appendChild(line);
-  }
-  container.appendChild(svg);
-
   const numbersLayer = document.createElement("div");
   numbersLayer.className = "a11y-numbers-layer";
   container.appendChild(numbersLayer);
@@ -85,6 +66,13 @@ export function buildOverlay(
     num.style.left = `${item.rect.left}px`;
     num.style.top = `${item.rect.top}px`;
     numbersLayer.appendChild(num);
+  }
+
+  if (annotation.trim()) {
+    const label = document.createElement("div");
+    label.className = "a11y-annotation";
+    label.textContent = annotation.trim();
+    shadow.appendChild(label);
   }
 
   return host;

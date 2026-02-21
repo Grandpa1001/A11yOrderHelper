@@ -1,6 +1,5 @@
-2026/02/10-22:08:24.772 2e9446 Reusing MANIFEST /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Local Storage/leveldb/MANIFEST-000001
-2026/02/10-22:08:24.775 2e9446 Recovering log #4
-2026/02/10-22:08:24.775 2e9446 Reusing old log /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Local Storage/leveldb/000004.log 
-2026/02/10-22:09:24.780 2e944d Level-0 table #7: started
-2026/02/10-22:09:24.787 2e944d Level-0 table #7: 662669 bytes OK
-2026/02/10-22:09:24.789 2e944d Delete type=0 #4
+2026/02/21-19:53:51.079 8176f Reusing MANIFEST /Users/kamil/Documents/GitHub/A11yOrderHelper/e2e/test-user-data/Default/Local Storage/leveldb/MANIFEST-000001
+2026/02/21-19:53:51.081 8176f Recovering log #3
+2026/02/21-19:53:51.081 8176f Level-0 table #3: started
+2026/02/21-19:53:51.084 8176f Level-0 table #3: 24207 bytes OK
+2026/02/21-19:53:51.086 8176f Delete type=0 #3

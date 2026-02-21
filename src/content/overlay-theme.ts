@@ -11,9 +11,6 @@ export interface OverlayThemeConfig {
   badgeHeight: string;
   badgeFontSize: string;
   badgeFontWeight: string;
-  lineStroke: string;
-  lineStrokeWidth: number;
-  lineStrokeLinecap: "round" | "butt" | "square";
   containerBackground: string;
 }
 
@@ -29,10 +26,7 @@ export const defaultTheme: OverlayThemeConfig = {
   badgeHeight: "1.5rem",
   badgeFontSize: "0.875rem",
   badgeFontWeight: "700",
-  lineStroke: "#333",
-  lineStrokeWidth: 2,
-  lineStrokeLinecap: "round",
-  containerBackground: "rgba(255, 255, 255, 1)",
+  containerBackground: "rgba(255, 255, 255, 0.5)",
 };
 
 export const minimalTheme: OverlayThemeConfig = {
@@ -45,10 +39,7 @@ export const minimalTheme: OverlayThemeConfig = {
   badgeHeight: "1.25rem",
   badgeFontSize: "0.75rem",
   badgeFontWeight: "600",
-  lineStroke: "#999",
-  lineStrokeWidth: 1,
-  lineStrokeLinecap: "round",
-  containerBackground: "rgba(255, 255, 255, 1)",
+  containerBackground: "rgba(255, 255, 255, 0.5)",
 };
 
 const themes: Record<OverlayThemeName, OverlayThemeConfig> = {

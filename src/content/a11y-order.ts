@@ -68,6 +68,17 @@ export function getViewportDimensions(): DocumentDimensions {
   };
 }
 
+/**
+ * Wymiary całego dokumentu (scrollWidth/scrollHeight) — overlay na całą stronę.
+ */
+export function getDocumentDimensions(doc: Document = document): DocumentDimensions {
+  const el = doc.documentElement;
+  return {
+    width: Math.max(el.scrollWidth, el.clientWidth),
+    height: Math.max(el.scrollHeight, el.clientHeight),
+  };
+}
+
 const HEADING_SELECTOR = "h1, h2, h3, h4, h5, h6, [role='heading']";
 const IMG_WITH_NAME_SELECTOR = "img[alt]:not([alt='']), img[aria-label], [role='img'][aria-label]";
 

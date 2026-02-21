@@ -1,7 +1,7 @@
 {
   "name": "a11y-order-helper",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite build --watch",
@@ -10,14 +10,11 @@
     "lint": "eslint src --max-warnings 0",
     "test:e2e": "npm run build && playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "npm run build && HEADED=1 playwright test",
-    "test:guidepup": "npx playwright test -c playwright.guidepup.config.ts",
-    "test:e2e:voiceover": "npm run build && HEADED=1 playwright test -c playwright.voiceover-extension.config.ts"
+    "test:e2e:headed": "npm run build && HEADED=1 playwright test"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.3.0",
     "@eslint/js": "^9.16.0",
-    "@guidepup/playwright": "^0.15.0",
     "@playwright/test": "^1.58.2",
     "@types/chrome": "^0.0.268",
     "eslint": "^9.16.0",

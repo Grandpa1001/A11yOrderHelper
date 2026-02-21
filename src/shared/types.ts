@@ -28,4 +28,5 @@ export interface ContentMessage {
   type: ContentMessageType;
   opacity?: number;
   readerType?: ReaderType;
+  annotation?: string;
 }

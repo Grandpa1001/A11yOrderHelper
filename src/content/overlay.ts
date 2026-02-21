@@ -15,10 +15,11 @@ export function setOverlayOpacity(value: number, doc: Document = document): void
 export function createOverlay(
   items: FocusOrderItem[],
   dimensions: DocumentDimensions,
-  themeName: OverlayThemeName = "default"
+  themeName: OverlayThemeName = "default",
+  annotation = ""
 ): HTMLElement {
   const theme = getTheme(themeName);
-  return buildOverlay(items, dimensions, theme);
+  return buildOverlay(items, dimensions, theme, annotation);
 }
 
 export function removeOverlay(doc: Document = document): void {

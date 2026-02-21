@@ -1,6 +1,7 @@
-#a11y-order-helper-host {
-  position: fixed;
-  inset: 0;
+:host {
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 2147483647;
   isolation: isolate;
   pointer-events: none;
@@ -11,20 +12,6 @@
   inset: 0;
   background: var(--a11y-container-bg, #fff);
   overflow: hidden;
-}
-
-.a11y-lines-svg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.a11y-line {
-  stroke: var(--a11y-line-stroke, #333);
-  stroke-width: var(--a11y-line-width, 2);
-  stroke-linecap: var(--a11y-line-cap, round);
 }
 
 .a11y-numbers-layer {
@@ -59,4 +46,25 @@
   border-width: 3px !important;
   border-color: #e65100 !important;
   box-shadow: 0 0 0 2px #fff;
+}
+
+.a11y-annotation {
+  position: fixed;
+  bottom: 14px;
+  left: 14px;
+  max-width: 340px;
+  padding: 5px 10px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #444;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  z-index: 1;
 }

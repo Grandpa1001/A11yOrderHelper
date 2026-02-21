@@ -35,15 +35,51 @@
             <option value="minimal">Minimalny</option>
           </select>
         </div>
+        <div class="annotation-section">
+          <label for="annotation-input" class="annotation-label">
+            Podpis weryfikacji
+            <span
+              class="annotation-tip"
+              title="Wpisz np. imię i nazwisko testera lub nazwę scenariusza. Pojawi się na białym tle podczas audytu."
+              aria-label="Wskazówka: Wpisz np. imię i nazwisko testera lub nazwę scenariusza. Pojawi się na białym tle podczas audytu."
+            >?</span>
+            <button
+              type="button"
+              id="btn-date-now"
+              class="annotation-date-btn"
+              title="Wstaw aktualną datę i godzinę"
+              aria-label="Wstaw aktualną datę i godzinę do pola podpisu"
+            >DataNow</button>
+          </label>
+          <input
+            type="text"
+            id="annotation-input"
+            class="annotation-input"
+            maxlength="120"
+            placeholder="np. Jan Kowalski · Scenariusz #3"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
         <div class="btn-group">
           <button type="button" class="btn btn-primary" id="btn-run">Uruchom</button>
           <button type="button" class="btn btn-secondary" id="btn-stop">Wyłącz</button>
         </div>
         <div class="slider-section">
           <label for="opacity-slider" class="slider-label">Przezroczystość</label>
-          <input type="range" id="opacity-slider" class="slider" min="0" max="100" value="0" />
+          <input type="range" id="opacity-slider" class="slider" min="0" max="100" value="50" />
         </div>
       </main>
+      <footer class="popup-footer">
+        <span class="popup-footer-text">Made by</span>
+        <a
+          href="https://mgrgracz.netlify.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="popup-footer-link"
+        >MgrGracz</a>
+        <span class="popup-version" id="popup-version" aria-label="Wersja rozszerzenia"></span>
+      </footer>
     </div>
     <script type="module" src="./popup.ts"></script>
   </body>
